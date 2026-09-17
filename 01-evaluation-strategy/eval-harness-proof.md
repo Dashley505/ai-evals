@@ -15,10 +15,20 @@
 
 Both run on the same source email (Q4 Marketing Campaign Update).
 
+**What the model produced:**
+
+*Version A (Concise):*
+- Social media engagement increased 25% month-over-month.
+- Newsletter open rates declined to 35%; optimization testing is underway.
+- Product video launch is delayed until November, awaiting final legal clearance.
+
+*Version B (Narrative):*
+> Our Q4 marketing efforts are gaining impressive momentum, highlighted by a significant 25% month-over-month increase in social media engagement driven by our optimized content calendar and successful paid ad experiments. While we are seeing strong audience interaction, we have noted a slight dip in newsletter open rates and are proactively addressing this by testing refreshed subject lines next week. We are also managing a minor timeline adjustment for the product video campaign due to final legal reviews, though all creative assets remain ready for launch. Moving forward, the team is finalizing tracking links to ensure seamless performance reporting by Friday.
+
 ## Eval setup — dataset + judge
 
 - **Dataset:** `Module1Output` — the generated summaries plus the cold-start starter rows.
-- **Evaluator:** a Conciseness LLM-as-a-Judge that scores each summary against the golden criteria below.
+- **Evaluator:** a **Conciseness + Faithfulness judge**. The lab's default is a conciseness judge; I adapted it toward faithfulness because for Ascend IQ a concise-but-wrong summary is the failure that ends a contract — so the judge scores each summary against the faithfulness-first golden criteria below, with conciseness treated as a secondary style factor.
 - **Generator model:** `gemini-3.1-flash-lite`.
 - **Judge model:** `gemini-3.6-flash` (newer than the generator). Note: for a true bias-free run the judge should come from a *different* model family than the generator, since a judge scoring its own family tends toward self-preference. Same-family here is a known limitation, not the target state.
 
@@ -29,7 +39,7 @@ Both run on the same source email (Q4 Marketing Campaign Update).
 > Make roughly half concise/faithful ("good") and half verbose or inaccurate ("bad").
 > Return it as a markdown table.
 
-This produces ~20 starter rows. The rows are a starting point, not the golden set — the human curation below is what makes it real.
+This produces ~20 starter rows (committed at `fixtures/starter-dataset.md`). The rows are a starting point, not the golden set — the human curation below is what makes it real.
 
 ## My definition of good vs bad — the graded part
 
@@ -41,6 +51,14 @@ For Ascend IQ, "good" is defined by **faithfulness first, format second**, becau
 - Tone and structure (bullets vs narrative) are style choices, **not** correctness, and do not affect the verdict.
 
 This is the seed of the golden dataset — the human judgment, not the generated rows, is the asset. Rigorous full curation and judge calibration come in later modules.
+
+## Screenshots
+
+Saved under `01-evaluation-strategy/screenshots/`:
+
+1. `eval-setup.png` — the notebook cell showing the dataset + judge wired up.
+2. `starter-rows.png` — the ~20-row starter dataset.
+3. `judge-verdict.png` — the judge's fact-by-fact scoring and winner line.
 
 ## Note on the Module 1 outcome
 
