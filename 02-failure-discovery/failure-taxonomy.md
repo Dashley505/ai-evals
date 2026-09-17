@@ -1,45 +1,30 @@
 # Failure Taxonomy Canvas · Ascend IQ
 
-> Repo file `ai-evals/02-failure-discovery/failure-taxonomy.md`. Becomes the **Failure Taxonomy** slide of the final pitch deck (Module 6) and feeds the Module 3 eval suite.
-
-## How to complete this file
-
-1. First complete `audit-log.md` (the failure audit) — this canvas prioritizes the failures you found there.
-2. Open the **M2 · Failure Taxonomy Canvas** tool from the Module 2 deck. Fill the three risk cards (click **↺ Load Ascend IQ defaults** to see a worked example first), then click **📋 Copy markdown** and paste it over the template below.
-3. Anchor severity to the **user promise / trust metrics you chose in the Module 1 Strategy Canvas** (`ai-evals/01-evaluation-strategy/strategy-canvas.md`) — severity is a strategic judgment, not just a frequency count.
-
-**Definition of done —** you're finished when the Top 3 table is fully filled (no `_…_` left), the #1 risk has a one-sentence Business Impact Statement in leadership language, and the prioritization is defended in 2–3 bullets.
-
-### Scoring guides
-
-**Frequency** = how many of the 20 audited rows carry this Trust Metric tag. **≥ 3 of 20 = HIGH** frequency; ≤ 2 = LOW.
-
-**Severity (P0–P3)** — a strategic call about business cost, independent of how often it happens:
-
-| Level | Meaning | Rough test |
-|---|---|---|
-| **P0** | Crisis Zone | Blocks the core promise; legal, compliance, or contract-breaking. |
-| **P1** | Hidden Risk | Real damage to trust or revenue, but survivable short-term. |
-| **P2** | Annoyance | Degrades experience; a workaround exists. |
-| **P3** | Low Priority | Cosmetic or rare. |
-
-**Agentic mode** (optional) — if the failure lives in the *trajectory* (the path of tool calls), tag it: `TOOL_MISUSE`, `REASONING_LOOP`, `SCOPE_ESCALATION`, or `RECOVERY_FAILURE`. Leave blank for output-only failures.
+> Repo file `ai-evals/02-failure-discovery/failure-taxonomy.md`. Becomes the Failure Taxonomy slide of the final pitch deck (Module 6) and feeds the Module 3 eval suite.
+> Built from my failure audit (`audit-log.md`): 10 confirmed failures, 9 of them a confident wrong fact (`#HALLUCINATION`), 1 a tone problem (`#UX_TRUST`). I ranked severity against my Module 1 promise, that a VP can act on our answers without re-checking them.
 
 ## Top 3 Prioritized Failures
 
 | Rank | Failure Type | Trust Tag | Agentic Mode | Frequency | Severity | Business Impact |
-|---|---|---|---|---|---|---|
-| _Example (replace): 1_ | _Fabricated Pricing_ | _#HALLUCINATION_ | _output-level_ | _4/20_ | _P0_ | _Contract disputes; blocks Enterprise renewals._ |
-| 1 | _…_ | _…_ | _…_ | _…/20_ | _P0–P3_ | _…_ |
-| 2 | _…_ | _…_ | _…_ | _…/20_ | _P0–P3_ | _…_ |
-| 3 | _…_ | _…_ | _…_ | _…/20_ | _P0–P3_ | _…_ |
+|:---:|---|---|---|:---:|:---:|---|
+| 1 | Backwards competitive claim | `#HALLUCINATION` | output-level | 9/20 | **P0** | Buyer picks us over a competitor on a claim that's the reverse of the truth, then leaves once they find out. |
+| 2 | Wrong compliance status | `#HALLUCINATION` | output-level | 9/20 | **P0** | A false "not SOC2 compliant" sends a VP down the wrong path in a vendor decision. |
+| 3 | Out-of-date price | `#HALLUCINATION` | output-level | 9/20 | **P1** | Old enterprise price quoted to a buyer, an awkward correction or a contract dispute, but usually caught first. |
+
+_Frequency is how many of the 20 answers carry the same tag. All three are the same problem, a confident wrong fact, which showed up in 9 of the 20, so they share the 9/20. These are all mistakes in the answer itself, so there's no agent-path tag to add (Agentic Mode stays output-level)._
 
 ## #1 Risk · Business Impact Statement
 
-> _Template: "This failure matters because [technical error] results in [business consequence]." Name the concrete cost — revenue, churn, legal, or trust — not the bug._
+**This failure matters because Ascend IQ confidently tells a buyer we beat a competitor who actually beats us, so customers choose us for a reason that isn't true, and leave when they find out.**
 
 ## Defending the Prioritization
 
-- _Why the #1 risk is P0 (severity), independent of how often it happens._
-- _Frequency threshold: ≥3 of 20 = HIGH._
-- _Severity anchored to the trust metrics you chose in the Module 1 Strategy Canvas._
+I ranked these on the Severity x Frequency matrix, with severity anchored to the trust metrics from my Module 1 Strategy Canvas, not on how often each one happened.
+
+**Why #1 is a P0.** My Module 1 promise was that Ascend IQ gives VP-level strategists verified answers they can act on without checking the work themselves. A backwards competitive claim breaks that promise at the worst possible moment, when the buyer is comparing us to a competitor to decide who to go with. They read "we're faster," pick us, and find out later the competitor was twice as fast. I can't think of a more expensive way to be wrong: that's a lost or churned account, not a bug ticket.
+
+**Why it beats the wrong price (#3).** A stale price is bad, but a salesperson almost always re-checks the number before a contract goes out, there's a natural stop before it costs us anything. A backwards competitive claim has no stop; it goes straight into the buyer's decision. That's the line I drew between P0 and P1: is there anyone in the loop who catches it before it reaches the customer?
+
+**Why I didn't just rank by how often it happens.** All three of my top failures are the same kind of mistake, and that kind showed up in almost half the answers I checked, so counting frequency can't tell them apart, they'd all tie. What separates them is what it costs us when one reaches a customer. The tone problem (a too-casual cold email) is real, but a customer shrugs it off, that's a P2, and it stays out of the top 3.
+
+**The call I went back and forth on.** The compliance question (#2) was the hardest to grade. On the surface the agent just said "I can't find the docs," which looks careful and safe. But the badge was right there, so it quietly told the user a competitor *isn't* compliant when it is. My Module 1 trade-off was explicit: an honest "I can't verify that" is safe, but a confident wrong answer is the one thing we can never do. This was the confident-wrong answer wearing a careful costume, so I graded it a failure and ranked it P0.
