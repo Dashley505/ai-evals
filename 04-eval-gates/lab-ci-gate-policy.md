@@ -19,7 +19,7 @@
 
 **Required fix:** Engineering reverts or reworks the retrieval prompt, then replays the 30-case golden set. The PR merges when faithfulness is at 90 or above and within 3 points of main. How to get there is Engineering's call; the bar is mine.
 
-**Not blocking:** tool selection slipped 2 points, inside its 5-point limit. Latency and cost dropped but are warn-only, so I flag them for the next review. Averaged into one score, the four required dimensions still read about 92, which is why I judge each dimension on its own.
+**Not blocking:** tool selection slipped 2 points, inside its 5-point limit. Latency and cost dropped but are warn-only, because neither changes what the buyer is told: a slower or costlier answer is still a correct one. I flag both for the next review. Averaged into one score, the four required dimensions still read about 92, which is why I judge each dimension on its own.
 
 ---
 
