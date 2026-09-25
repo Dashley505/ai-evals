@@ -9,7 +9,7 @@ The following thresholds must be met by Model Candidate v1.x before approval for
 | Severity | Metric | Threshold | Dataset | Method |
 |---|---|---|---|---|
 | Hard | Competitor-claim hallucination rate: backwards or unsupported claims about a named competitor (Row 08) | = 0% | `Ascend_IQ_Logs`, comparative-claim cases | LLM-as-judge from a different model family, calibrated to κ ≥ 0.6, per `03-eval-suites/lab-2-eval-spec.md` |
-| Soft | Pricing hallucination rate: prices not found in the source data (Row 01) | < 2% | `Ascend_IQ_Logs`, pricing questions | LLM-as-judge checks every price in the answer against the source pricing data |
+| Soft | Pricing hallucination rate: prices that are invented or out of date compared with current source pricing (Row 01) | < 2% | `Ascend_IQ_Logs`, pricing questions | Two-step: a code check against current price points on every PR, then an LLM-as-judge catches what the code check misses (an old price can pass a code check because it once existed, per the Module 3 lab) |
 | Advisory | Latency (p95) (Row 03) | ≤ 2.0s target, monitored, does not block launch | `Ascend_IQ_Logs` | Response timing on the full staging run |
 
 ## 4.1 CI Gate Policy
